@@ -21,6 +21,11 @@ public class ProductManager {
         return products.add(product);
     }
 
+    public void deleteProduct(int index){
+
+        products.remove(index);
+    }
+
     public List<Product> getProducts() {
         return products;
     }

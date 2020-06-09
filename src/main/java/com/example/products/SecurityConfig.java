@@ -3,6 +3,7 @@ package com.example.products;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -28,6 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("admin")
                 .build();
 
+        UserDetails moderator = User.withDefaultPasswordEncoder()
+                .username("moderator")
+                .password("mod")
+                .roles("moderator")
+                .build();
+
         return new InMemoryUserDetailsManager(user, admin);
     }
 
@@ -36,10 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //super.configure(http);
 
         http.authorizeRequests()
-                .antMatchers("/hello").permitAll()
+                .antMatchers(HttpMethod.GET, "/products").permitAll()
+                .antMatchers(HttpMethod.POST, "/products").hasAnyRole("moderator", "admin")
+                .antMatchers(HttpMethod.DELETE, "/products").hasRole("admin")
                 .anyRequest().hasRole("admin")
-                .and()
-                .formLogin().permitAll();
+                .and().formLogin().permitAll()
+                .and().logout().permitAll()
+                .and().csrf().disable();
 
     }
 }
