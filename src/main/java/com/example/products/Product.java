@@ -1,19 +1,37 @@
 package com.example.products;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Product {
 
-    String name;
-    int proteins;
-    int fat;
-    int carbo;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private int proteins;
+    private int fat;
+    private int carbo;
 
     public Product(){}
 
-    public Product(String name, int proteins, int fat, int carbo) {
+    public Product(Long id, String name, int proteins, int fat, int carbo) {
+        this.id = id;
         this.name = name;
         this.proteins = proteins;
         this.fat = fat;
         this.carbo = carbo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

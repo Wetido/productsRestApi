@@ -3,41 +3,38 @@ package com.example.products;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class ProductAPI {
 
-    private ProductManager productManager;
+    //private ProductManager productManager;
+    private ProductRepo productRepo;
 
     @Autowired
-    public ProductAPI(ProductManager productManager){
-
-        this.productManager = productManager;
+    public ProductAPI(ProductRepo productRepo) {
+        this.productRepo = productRepo;
     }
 
-
-    @GetMapping("/hello")
+    @RequestMapping("/hello")
     public String HelloWorld(){
 
-        return "helmno";
+        return "page";
     }
 
     @GetMapping("/products")
-    public List<Product> getProducts(){
+    public Iterable<Product> getProducts(){
 
-        return productManager.getProducts();
+        return productRepo.findAll();
     }
 
     @PostMapping("/product")
-    public boolean addProduct(@RequestBody Product product){
+    public Product addProduct(@RequestBody Product product){
 
-        return productManager.addProduct(product);
+        return productRepo.save(product);
     }
 
-    @DeleteMapping("/product")
+/*    @DeleteMapping("/product")
     public void deleteProduct(@RequestParam int index){
         productManager.deleteProduct(index);
-    }
+    }*/
 
 }
